@@ -26,11 +26,24 @@ def contrast_stretch(im):
 
     return out
 
+def calc_ndvi(image):
+    b, g, r = cv2.split(image)
+    bottom = (r.astype(float) + b.astype(float))
+    bottom[bottom==0] - 0.01
+    ndvi = (b.astype(float)) / bottom
+    return ndvi
+
 
 display(original, 'Original')
 contrasted = contrast_stretch(original)
 display(contrasted, 'Contrasted Original')
 cv2.imwrite('./output/contrasted.png', contrasted)
+ndvi = calc_ndvi(contrasted)
+display(ndvi, 'NDVI')
+cv2.imwrite('./output/ndvi.png', ndvi)
+ndvi_contrasted = contrast_stretch(ndvi)
+display(ndvi_contrasted, 'NDVI Contrasted')
+cv2.imwrite('./output/ndvi_contrasted.png', ndvi_contrasted)
 
 cv2.waitKey(0)
 cv2.destroyAllWindows()
