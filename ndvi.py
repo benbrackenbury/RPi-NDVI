@@ -1,8 +1,6 @@
+import sys
 import cv2
 import numpy as np
-
-original = cv2.imread('./assets/img/park.png')
-
 
 def display(image, image_name):
     image = np.array(image, dtype=float)/float(255)
@@ -33,17 +31,28 @@ def calc_ndvi(image):
     ndvi = (b.astype(float)) / bottom
     return ndvi
 
+def main():
+    args = sys.argv[1:]
 
-display(original, 'Original')
-contrasted = contrast_stretch(original)
-display(contrasted, 'Contrasted Original')
-cv2.imwrite('./output/contrasted.png', contrasted)
-ndvi = calc_ndvi(contrasted)
-display(ndvi, 'NDVI')
-cv2.imwrite('./output/ndvi.png', ndvi)
-ndvi_contrasted = contrast_stretch(ndvi)
-display(ndvi_contrasted, 'NDVI Contrasted')
-cv2.imwrite('./output/ndvi_contrasted.png', ndvi_contrasted)
+    input_image_path = original = cv2.imread('./assets/img/park.png')
 
-cv2.waitKey(0)
-cv2.destroyAllWindows()
+    if len(args) == 2 and args[0] == '-i':
+        input_image_path = args[1]
+
+    original = cv2.imread(input_image_path)
+
+    display(original, 'Original')
+    contrasted = contrast_stretch(original)
+    display(contrasted, 'Contrasted Original')
+    cv2.imwrite('./output/contrasted.png', contrasted)
+    ndvi = calc_ndvi(contrasted)
+    display(ndvi, 'NDVI')
+    cv2.imwrite('./output/ndvi.png', ndvi)
+    ndvi_contrasted = contrast_stretch(ndvi)
+    display(ndvi_contrasted, 'NDVI Contrasted')
+    cv2.imwrite('./output/ndvi_contrasted.png', ndvi_contrasted)
+
+    cv2.waitKey(0)
+    cv2.destroyAllWindows()
+
+main()
