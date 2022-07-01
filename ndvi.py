@@ -1,6 +1,7 @@
 import sys
 import cv2
 import numpy as np
+from lib.fastiecm import fastiecm
 
 def display(image, image_name):
     image = np.array(image, dtype=float)/float(255)
@@ -43,14 +44,18 @@ def main():
 
     display(original, 'Original')
     contrasted = contrast_stretch(original)
-    display(contrasted, 'Contrasted Original')
+    # display(contrasted, 'Contrasted Original')
     cv2.imwrite('./output/contrasted.png', contrasted)
     ndvi = calc_ndvi(contrasted)
-    display(ndvi, 'NDVI')
+    # display(ndvi, 'NDVI')
     cv2.imwrite('./output/ndvi.png', ndvi)
     ndvi_contrasted = contrast_stretch(ndvi)
     display(ndvi_contrasted, 'NDVI Contrasted')
     cv2.imwrite('./output/ndvi_contrasted.png', ndvi_contrasted)
+    color_mapped_prep = ndvi_contrasted.astype(np.uint8)
+    color_mapped_image = cv2.applyColorMap(color_mapped_prep, fastiecm)
+    display(color_mapped_image, 'Color mapped')
+    cv2.imwrite('./output/color_mapped_image.png', color_mapped_image)
 
     cv2.waitKey(0)
     cv2.destroyAllWindows()
