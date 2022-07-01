@@ -34,7 +34,7 @@ def calc_ndvi(image):
 def main():
     args = sys.argv[1:]
 
-    input_image_path = original = cv2.imread('./assets/img/park.png')
+    input_image_path = './assets/img/park.png'
 
     if len(args) == 2 and args[0] == '-i':
         input_image_path = args[1]
