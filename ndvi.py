@@ -2,8 +2,8 @@ import sys
 import cv2
 import numpy as np
 from lib.fastiecm import fastiecm
-# from picamera import PiCamera
-# import picamera.array
+from picamera import PiCamera
+import picamera.array
 
 def display(image, image_name):
     image = np.array(image, dtype=float)/float(255)
@@ -31,18 +31,18 @@ def calc_ndvi(image):
     b, g, r = cv2.split(image)
     bottom = (r.astype(float) + b.astype(float))
     bottom[bottom==0] - 0.01
-    ndvi = (b.astype(float)) / bottom
+    ndvi = (r.astype(float) - b) / bottom
     return ndvi
 
 def main():
-    args = sys.argv[1:]
-
-    input_image_path = './assets/img/park.png'
-
-    if len(args) == 2 and args[0] == '-i':
-        input_image_path = args[1]
-
-    original = cv2.imread(input_image_path)
+    cam = PiCamera()
+    cam.rotation = 180
+    cam.resolution = (1920, 1080)
+    stream = picamera.array.PiRGBArray(cam)
+    cam.capture(stream, format='bgr', use_video_port=True)
+    original = stream.array
+    # input_image_path = './assets/img/park.png'
+    # original = cv2.imread(input_image_path)
 
     display(original, 'Original')
     contrasted = contrast_stretch(original)
@@ -58,6 +58,8 @@ def main():
     color_mapped_image = cv2.applyColorMap(color_mapped_prep, fastiecm)
     display(color_mapped_image, 'Color mapped')
     cv2.imwrite('./output/color_mapped_image.png', color_mapped_image)
+
+    cv2.imwrite('./output/original.png', original)
 
     cv2.waitKey(0)
     cv2.destroyAllWindows()
