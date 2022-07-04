@@ -35,14 +35,14 @@ def calc_ndvi(image):
     return ndvi
 
 def main():
-    cam = PiCamera()
-    cam.rotation = 180
-    cam.resolution = (1920, 1080)
-    stream = picamera.array.PiRGBArray(cam)
-    cam.capture(stream, format='bgr', use_video_port=True)
-    original = stream.array
-    # input_image_path = './assets/img/park.png'
-    # original = cv2.imread(input_image_path)
+    # cam = PiCamera()
+    # cam.rotation = 180
+    # cam.resolution = (1920, 1080)
+    # stream = picamera.array.PiRGBArray(cam)
+    # cam.capture(stream, format='bgr', use_video_port=True)
+    # original = stream.array
+    input_image_path = './assets/img/park.png'
+    original = cv2.imread(input_image_path)
 
     display(original, 'Original')
     contrasted = contrast_stretch(original)
