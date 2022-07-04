@@ -30,15 +30,12 @@ class Application:
         cv2.imshow('Colour Mapped', self.color_mapped)
 
     def run(self):
-        while(True):
+        #run until q key is pressed
+        while(cv2.waitKey(1) & 0xFF != ord('q')):
             self.getFrameAndApplyFilters()
             self.displayFrame()
-
-            #exit when q is pressed
-            if cv2.waitKey(1) & 0xFF == ord('q'):
-                break
         
 
 app = Application()
-app.run() #runs until q key is pressed
+app.run()
 app.end()
