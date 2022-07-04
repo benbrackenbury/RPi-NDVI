@@ -2,6 +2,8 @@ import sys
 import cv2
 import numpy as np
 from lib.fastiecm import fastiecm
+# from picamera import PiCamera
+# import picamera.array
 
 def display(image, image_name):
     image = np.array(image, dtype=float)/float(255)
