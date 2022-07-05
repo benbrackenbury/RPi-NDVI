@@ -6,7 +6,7 @@ setup:
 	pip3 install -Ur requirements.txt
 
 preview:
-	python src/preview.py
+	python3 src/preview.py
 
 webview:
-	python src/webview.py
+	python3 src/webview.py
