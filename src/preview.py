@@ -1,12 +1,12 @@
 import cv2
 import numpy as np
+# from flask import Flask, render_template, Response, stream_with_context, request
 
 from filters import Filters
 
 class Application:
     videoStream = cv2.VideoCapture(0)
     original = contrasted = ndvi = ndvi_contrasted = color_mapped = 0
-
     def end(self):
         self.videoStream.release()
         cv2.destroyAllWindows()
@@ -30,12 +30,13 @@ class Application:
         cv2.imshow('Colour Mapped', self.color_mapped)
 
     def run(self):
-        #run until q key is pressed
+        # run until q key is pressed
         while(cv2.waitKey(1) & 0xFF != ord('q')):
             self.getFrameAndApplyFilters()
             self.displayFrame()
+
         
 
-app = Application()
-app.run()
-app.end()
+preview = Application()
+preview.run()
+preview.end()

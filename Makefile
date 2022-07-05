@@ -5,5 +5,8 @@ clean:
 setup:
 	pip3 install -Ur requirements.txt
 
-run:
-	python src/app.py
+preview:
+	python src/preview.py
+
+webview:
+	python src/webview.py
