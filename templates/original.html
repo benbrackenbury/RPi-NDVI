@@ -10,15 +10,15 @@
     <h1>NDVI Demo</h1>
     <div class="camera-grid">
         <nav>
-            <a href="/" class="active">
+            <a href="/">
                 <h2>Colour Mapped</h2>
             </a>
-            <!-- <a href="/original">
+            <a href="/original" class="active">
                 <h2>Original</h2>
-            </a> -->
+            </a>
         </nav>
         <div class="img-wrapper">
-            <img src="{{ url_for('video') }}" alt="Colour Mapped" width="100%">
+            <img src="{{ url_for('video') }}" alt="Original" width="100%">
         </div>
     </div>
 
