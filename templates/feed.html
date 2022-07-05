@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NDVI Demo</title>
+</head>
+<body>
+    <h1>NDVI Demo</h1>
+    <div class="camera-grid">
+        <div class="img-wrapper">
+            <img src="{{ url_for('video') }}" alt="Original" width="100%">
+        </div>
+        <div class="img-wrapper">
+            <img src="{{ url_for('contrasted') }}" alt="Contrasted" width="100%">
+        </div>
+        <div class="img-wrapper">
+            <img src="{{ url_for('ndvi') }}" alt="NDVI" width="100%">
+        </div>
+        <div class="img-wrapper">
+            <img src="{{ url_for('ndvi_contrasted') }}" alt="NDVI Contrasted" width="100%">
+        </div>
+        <div class="img-wrapper">
+            <img src="{{ url_for('color_map') }}" alt="Colour Map" width="100%">
+        </div>
+    </div>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            scroll-behavior: smooth;
+        }
+
+        .camera-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 2.5rem;
+            margin: 1rem 2.5rem;
+        }
+
+        .camera-grid img {
+            border-radius: 6px;
+            margin-top: 1.75em;
+        }
+
+        .img-wrapper {
+            position: relative;
+        }
+
+        .img-wrapper::before {
+            content: 'Original';
+            position: absolute;
+            top: 0;
+            left: 0;
+            font-size: 20px;
+            margin-left: 6px;
+        }
+    </style>
+</body>
+</html>
