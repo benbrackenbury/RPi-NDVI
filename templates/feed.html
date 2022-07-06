@@ -9,18 +9,31 @@
 <body>
     <h1>NDVI Demo</h1>
     <div class="camera-grid">
-        <nav>
-            <a href="/" class="active">
-                <h2>Colour Mapped</h2>
-            </a>
-            <a href="/original">
-                <h2>Original</h2>
-            </a>
-        </nav>
         <div class="img-wrapper">
-            <img src="{{ url_for('video') }}" alt="Colour Mapped" width="100%">
+            <h2>Original</h2>
+            <img src="{{ url_for('video') }}" alt="loading">
+        </div>
+        <div class="img-wrapper">
+            <h2>Contrasted</h2>
+            <img src="{{ url_for('video_contrasted') }}" alt="loading">
+        </div>
+        <div class="img-wrapper">
+            <h2>NDVI + Contrasted</h2>
+            <img src="{{ url_for('video_ndvi_contrasted') }}" alt="loading">
+        </div>
+        <div class="img-wrapper">
+            <h2>Colour Mapped</h2>
+            <img src="{{ url_for('video_color_map') }}" alt="loading">
         </div>
     </div>
+
+    <script>
+        document.querySelectorAll('.img-wrapper img').forEach((img, index, all) => {
+            img.addEventListener('click', e => {
+                e.target.parentElement.classList.toggle("large")
+            })
+        })
+    </script>
 
     <style>
         * {
@@ -50,14 +63,22 @@
         }
 
         .camera-grid {
-            margin: 1rem 2.5rem;
-            width: 80vw;
-            margin: 0 auto;
+            --num-cols: 2;
+            display: grid;
+            grid-template-columns: repeat(var(--num-cols), 1fr);
+            margin: 2rem;
+            gap: 2rem;
         }
 
         .camera-grid img {
             border-radius: 6px;
             margin-top: 1.75em;
+            width: 100%;
+            aspect-ratio: 1;
+        }
+
+        .large {
+            grid-column: 1 / calc(var(--num-cols) + 1);
         }
 
         .img-wrapper {

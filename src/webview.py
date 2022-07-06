@@ -1,44 +1,91 @@
+import threading
+import cv2 as cv
 from flask import Flask, render_template, Response
-import cv2
 from filters import Filters
+from lib.FreshestFrame import FreshestFrame
 
-app = Flask('__name__')
+def callback(img):
+    return
 
-def gen_frames():
-    camera = cv2.VideoCapture(-1)
+def gen_frames(cap):
+    fresh = FreshestFrame(cap)
+    fresh.callback = callback
+
     while True:
-        success, frame = camera.read()
-        if success == False:
-            camera.release()
-            print("Please refresh page")
-            break
-        else:
-            original = frame
-            contrasted = Filters.contrast_stretch(original)
-            ndvi = Filters.calc_ndvi(contrasted)
-            ndvi_contrasted = Filters.contrast_stretch(ndvi)
-            color_mapped = Filters.color_map(ndvi_contrasted)
+        img = fresh.read()
+        if img is None:
+            break;
+        ret, buffer = cv.imencode('.jpg', img)
+        yield (b'--frame\r\n'
+            b'Content-Type: image/jpeg\r\n\r\n' + buffer.tobytes() + b'\r\n')
 
-            _, original_buffer = cv2.imencode('.jpg', original)
-            _, contrasted_buffer = cv2.imencode('.jpg', contrasted)
-            _, ndvi_buffer = cv2.imencode('.jpg', ndvi)
-            _, ndvi_contrasted_buffer = cv2.imencode('.jpg', ndvi_contrasted)
-            _, color_mapped_buffer = cv2.imencode('.jpg', color_mapped)
+def gen_frames_contrasted(cap):
+    fresh = FreshestFrame(cap)
+    fresh.callback = callback
 
-            yield (b'--frame\r\n'
-                    b'Content-Type: image/jpeg\r\n\r\n' + color_mapped_buffer.tobytes() + b'\r\n')
+    while True:
+        img = fresh.read()
+        if img is None:
+            break;
+        img = Filters.contrast_stretch(img)
+        ret, buffer = cv.imencode('.jpg', img)
+        yield (b'--frame\r\n'
+            b'Content-Type: image/jpeg\r\n\r\n' + buffer.tobytes() + b'\r\n')
 
-@app.route('/')
-def index():
-    return render_template('feed.html')
+def gen_frames_ndvi_contrasted(cap):
+    fresh = FreshestFrame(cap)
+    fresh.callback = callback
 
-@app.route('/original')
-def original():
-    return render_template('original.html')
+    while True:
+        img = fresh.read()
+        if img is None:
+            break;
+        img = Filters.contrast_stretch(Filters.calc_ndvi(Filters.contrast_stretch(img)))
+        ret, buffer = cv.imencode('.jpg', img)
+        yield (b'--frame\r\n'
+            b'Content-Type: image/jpeg\r\n\r\n' + buffer.tobytes() + b'\r\n')
 
-@app.route('/video')
-def video():
-    return Response(gen_frames(), mimetype='multipart/x-mixed-replace; boundary=frame')
+def gen_frames_color_map(cap):
+    fresh = FreshestFrame(cap)
+    fresh.callback = callback
 
-if __name__ == "__main__":
-    app.run(port='3000', host='0.0.0.0', debug='true')
+    while True:
+        img = fresh.read()
+        if img is None:
+            break;
+        img = Filters.color_map(Filters.contrast_stretch(Filters.calc_ndvi(Filters.contrast_stretch(img))))
+        ret, buffer = cv.imencode('.jpg', img)
+        yield (b'--frame\r\n'
+            b'Content-Type: image/jpeg\r\n\r\n' + buffer.tobytes() + b'\r\n')
+
+def main():
+
+    app = Flask('__name__')
+
+    cap = cv.VideoCapture(0)
+    cap.set(cv.CAP_PROP_FPS, 30)
+
+    @app.route('/')
+    def index():
+        return render_template('feed.html')
+
+    @app.route('/video')
+    def video():
+        return Response(gen_frames(cap), mimetype='multipart/x-mixed-replace; boundary=frame')
+    
+    @app.route('/video_contrasted')
+    def video_contrasted():
+        return Response(gen_frames_contrasted(cap), mimetype='multipart/x-mixed-replace; boundary=frame')
+
+    @app.route('/video_ndvi_contrasted')
+    def video_ndvi_contrasted():
+        return Response(gen_frames_ndvi_contrasted(cap), mimetype='multipart/x-mixed-replace; boundary=frame')
+
+    @app.route('/video_color_map')
+    def video_color_map():
+        return Response(gen_frames_color_map(cap), mimetype='multipart/x-mixed-replace; boundary=frame')
+    
+    threading.Thread(target=lambda: app.run(host='0.0.0.0', port='3000', debug=True, use_reloader=False)).start()
+
+if (__name__ == '__main__'):
+    main()
