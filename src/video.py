@@ -3,8 +3,8 @@ import cv2
 cap = cv2.VideoCapture(0)
 
 # Define the codec and create VideoWriter object
-fourcc = cv2.VideoWriter_fourcc(*'avc1') #(*'MP42')
-out = cv2.VideoWriter('output.avi', fourcc, 20.0, (640, 480))
+fourcc = cv2.VideoWriter_fourcc(*'MP42') #(*'MP42')
+out = cv2.VideoWriter('output.mp4', fourcc, 20.0, (640, 480))
 
 while cap.isOpened():
     ret, frame = cap.read()
