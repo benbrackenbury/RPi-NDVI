@@ -1,9 +1,6 @@
-# Python program to illustrate
-# saving an operated video
-
-# organize imports
 import numpy as np
 import cv2
+from filters import Filters
 
 # This will return video from the first webcam on your computer.
 cap = cv2.VideoCapture(0)
@@ -20,16 +17,16 @@ while(True):
 
   # Converts to HSV color space, OCV reads colors as BGR
   # frame is converted to hsv
-  hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
+  contrasted = Filters.contrast_stretch(frame)
   
   # output the frame
-  out.write(hsv)
+  out.write(frame)
   
   # The original input frame is shown in the window
   cv2.imshow('Original', frame)
 
   # The window showing the operated video stream
-  cv2.imshow('frame', hsv)
+  cv2.imshow('frame', contrasted)
 
   
   # Wait for 'a' key to stop the program
