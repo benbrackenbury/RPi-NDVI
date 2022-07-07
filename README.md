@@ -72,8 +72,8 @@ The raspberry Pi should be running Raspbian or any Linux operating system which 
 ## 3rd Party Libraries & Code
 * OpenCV, Flask, NumPy
 * Scripts in the src/lib directory have been originally created by a third party.
-    * [Fastiecm colour mapping]("https://projects-static.raspberrypi.org/projects/astropi-ndvi/2cc9d1033d9c4f05388632e7912a4bb5531b3d94/en/images/fastiecm.py")
+    * [Fastiecm colour mapping](https://projects-static.raspberrypi.org/projects/astropi-ndvi/2cc9d1033d9c4f05388632e7912a4bb5531b3d94/en/images/fastiecm.py)
 
-    * [Script for asynchronously accessing the most recent frame captured by the camera]("https://gist.github.com/crackwitz/15c3910f243a42dcd9d4a40fcdb24e40")
+    * [Script for asynchronously accessing the most recent frame captured by the camera](https://gist.github.com/crackwitz/15c3910f243a42dcd9d4a40fcdb24e40)
 
         * Partially modified to work with this existsing application.
