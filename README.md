@@ -3,8 +3,8 @@
 Uses the Raspberry Pi NoIR infrared camera to measure the NDVI (Normalised Difference Vegetation Index) of plants visualise their health.
 
 <div style="display:flex; gap:6px;">
-    <img src="./img/preview.jpg" alt="preview view" height="200px">
-    <img src="./img/webview.jpeg" alt="Web view" height="200px" style="aspect-ratio:1.43/1">
+    <img src="./img/preview.jpg" alt="preview view" height="250px">
+    <img src="./img/webview.jpeg" alt="Web view" height="250px" style="aspect-ratio:1.43/1">
 </div>
 
 ## Background
