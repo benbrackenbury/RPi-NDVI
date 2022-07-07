@@ -2,6 +2,11 @@
 
 Uses the Raspberry Pi NoIR infrared camera to measure the NDVI (Normalised Difference Vegetation Index) of plants visualise their health.
 
+<div style="display:flex; gap:6px;">
+    <img src="./img/preview.jpg" alt="preview view" width="100%">
+    <img src="./img/webview.jpeg" alt="Web view" width="100%">
+</div>
+
 ## Background
 Plants use photosynthesis to convert sunlight, water, and carbon dioxide into sugar, which is used for its energy.
 
