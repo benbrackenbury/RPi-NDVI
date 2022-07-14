@@ -8,7 +8,6 @@ import cv2 as cv
 class FreshestFrame(threading.Thread):
     def __init__(self, capture, name="FreshestFrame"):
         self.capture = capture
-        # assert self.capture.isOpened()
 
         self.cond = threading.Condition()
         self.running = False
@@ -31,8 +30,8 @@ class FreshestFrame(threading.Thread):
     def run(self):
         counter = 0
         while self.running:
+            time.sleep(0.5)
             (rv, img) = self.capture.read()
-            # assert rv
             counter += 1
 
             with self.cond:
