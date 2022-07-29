@@ -1,3 +1,4 @@
+import os
 import threading
 import cv2 as cv
 from flask import Flask, render_template, Response
@@ -18,8 +19,8 @@ def gen_frames(cap, filter):
 
         contrasted = Filters.contrast_stretch(img)
         ndvi = Filters.calc_ndvi(contrasted)
-        contrated_ndvi = Filters.calc_ndvi(ndvi)
-        color_mapped = Filters.color_map(contrated_ndvi)
+        contrasted_ndvi = Filters.contrast_stretch(ndvi)
+        color_mapped = Filters.color_map(contrasted_ndvi)
 
         if filter == 'original':
             imgToShow = img
@@ -27,7 +28,7 @@ def gen_frames(cap, filter):
             imgToShow = contrasted
         elif filter == 'contrasted_ndvi':
             imgToShow = contrasted_ndvi
-        elif filter = 'color_mapped':
+        elif filter == 'color_mapped':
             imgToShow = color_mapped
 
         ret, buffer = cv.imencode('.jpg', imgToShow)
@@ -55,11 +56,26 @@ def main():
 
     @app.route('/video_ndvi_contrasted')
     def video_ndvi_contrasted():
-        return Response(gen_frames(cap, 'ndvi_contrasted'), mimetype='multipart/x-mixed-replace; boundary=frame')
+        return Response(gen_frames(cap, 'contrasted_ndvi'), mimetype='multipart/x-mixed-replace; boundary=frame')
 
     @app.route('/video_color_map')
     def video_color_map():
         return Response(gen_frames(cap, 'color_mapped'), mimetype='multipart/x-mixed-replace; boundary=frame')
+
+
+    # reboot button
+    @app.route("/reboot", methods=['POST'])
+    def reboot():
+        print("reboot")
+        os.system("sudo shutdown -r now")
+        return render_template('feed.html')
+
+    # shutdown button
+    @app.route("/shutdown", methods=['POST'])
+    def shutdown():
+        print("Shut down")
+        os.system("sudo shutdown -h now")
+        return render_template('feed.html')
     
     threading.Thread(target=lambda: app.run(host='0.0.0.0', port='3000', debug=True, use_reloader=False)).start()
 

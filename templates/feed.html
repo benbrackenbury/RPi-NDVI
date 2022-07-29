@@ -7,7 +7,17 @@
     <title>NDVI Demo</title>
 </head>
 <body>
-    <h1>NDVI Demo</h1>
+    <nav>
+        <h1>NDVI Demo</h1>
+        <div class="buttons">
+            <form action="/reboot" method="POST">
+                <button type="submit">Reboot</button>
+            </form>
+            <form action="/shutdown" method="POST">
+                <button type="submit">Power Off</button>
+            </form>
+        </div>
+    </nav>
     <div class="camera-grid">
         <div class="img-wrapper">
             <h2>Original</h2>
@@ -28,6 +38,15 @@
     </div>
 
     <script>
+        document.querySelectorAll('form').forEach((form, index, all) => {
+            form.addEventListener('submit', e => {
+                e.preventDefault()
+                if(confirm("Are you sure?")) {
+                    e.target.submit()
+                }
+            })
+        })
+        
         document.querySelectorAll('.img-wrapper img').forEach((img, index, all) => {
             img.addEventListener('click', e => {
                 e.target.parentElement.classList.toggle("large")
@@ -46,14 +65,26 @@
         nav {
             display: flex;
             align-items: center;
+            justify-content: space-between;
             gap: 2rem;
             margin:  0 auto;
+            padding: 1rem 2rem;
         }
 
         nav a {
             text-decoration: none;
             color: inherit;
             opacity: 0.5;
+        }
+
+        .buttons {
+            display: flex;
+            gap: 1em;
+        }
+
+        button {
+            font-size: 16px;
+            padding: 0.2em 0.7em;
         }
 
         nav a.active,
